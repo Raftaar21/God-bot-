@@ -98,20 +98,6 @@ async def get_proof(message: Message, state: FSMContext):
         "confirmed": False
     }
 
-    reports.append(report)
-
-    # USER RECEIPT
-    await message.answer(
-        f"🧾 RECEIPT\n\n"
-        f"📌 ID: #{report_id}\n"
-        f"👤 {data['username']}\n"
-        f"💰 {data['amount']}\n\n"
-        f"📸 Proof Submitted\n"
-        f"⏳ Pending Admin Approval",
-        reply_markup=main_kb
-    )
-
-    # ADMIN PANEL (PHOTO)
     admin_kb = ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text=f"✅ Approve {report_id}")],
@@ -174,21 +160,7 @@ async def admin_actions(message: Message):
                     reply_markup=post_kb
                 )
 
-                # CONFIRM BUTTON
-                confirm_kb = InlineKeyboardMarkup(
-                    inline_keyboard=[
-                        [InlineKeyboardButton(text="⚠️ Respond", callback_data=f"confirm_{rid}")]
-                    ]
-                )
-
-                try:
-                    await bot.send_message(
-                        r["username"],
-                        f"⚠️ You are reported!\nID: #{rid}",
-                        reply_markup=confirm_kb
-                    )
-                except:
-                    pass
+        
 
     elif "Reject" in text:
         rid = int(text.split()[-1])
